@@ -1,0 +1,9 @@
+FTP:
+  Hostname: localhost:2121
+  Username: test
+  Password: secret
+WebDAV:
+  URL: http://localhost:8080/remote.php/dav/files/admin/
+  Username: admin
+  Password: secret
+  Folder: /Documents/Documents scannés
