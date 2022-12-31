@@ -79,7 +79,7 @@ func (i *Integration) Do() {
 			if e.IsDir() {
 				continue
 			}
-			log.Printf("Found a new file: %s", e.Name())
+			log.Printf("Found a new file on FTP server: %s (%d kB)", e.Name(), e.Size()/1024)
 
 			err = i.Download(e.Name())
 			if err != nil {
@@ -110,6 +110,12 @@ func (i *Integration) Download(filename string) error {
 	if err != nil {
 		return err
 	}
+
+	info, err := f.Stat()
+	if err != nil {
+		return err
+	}
+	log.Printf("Downloaded %s from FTP server (%d kB)", filename, info.Size()/1024)
 
 	_, err = f.Seek(0, io.SeekStart)
 	if err != nil {
@@ -160,7 +166,7 @@ func (i *Integration) Download(filename string) error {
 			delete = true
 			break
 		} else {
-			log.Printf("File size mismatch (%d != %d), retrying an upload!", fileInfo.Size(), davInfo.Size())
+			log.Printf("File size mismatch on WebDAV server (%d != %d), retrying an upload!", fileInfo.Size(), davInfo.Size())
 		}
 
 		time.Sleep(5 * time.Second)
